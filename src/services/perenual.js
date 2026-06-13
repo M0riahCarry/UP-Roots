@@ -1,7 +1,16 @@
 const API_KEY = import.meta.env.VITE_PERENUAL_API_KEY;
-const BASE_URL = "https://perenual.com/api";
+// v2 is Perenual's current API. The old /api (v1) path is being retired and
+// now returns 404, so both calls below go through /api/v2.
+const BASE_URL = "https://perenual.com/api/v2";
 
 export async function searchPlants(query) {
+  // A missing key is the other common cause of failures — catch it early with
+  // a clear message instead of a confusing status code from the API.
+  if (!API_KEY) {
+    throw new Error(
+      "Missing API key. Add VITE_PERENUAL_API_KEY to a .env file, then restart the dev server.",
+    );
+  }
   // Note: we deliberately don't filter by zone here. Zone is used client-side
   // to *evaluate* each result (the survival badge), so the user still sees
   // plants that won't survive — and learns why — instead of them being hidden.
