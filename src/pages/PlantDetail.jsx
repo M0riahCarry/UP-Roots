@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPlantById } from "../services/perenual";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import SurvivalBadge from "../components/SurvivalBadge";
 
 function PlantDetail() {
   //pulls the :id segment out of the url, e.g. /plant/425 -> "425"
@@ -9,6 +11,8 @@ function PlantDetail() {
   const [plant, setPlant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  //read (don't change) the zone the user picked on the Home page
+  const [zone] = useLocalStorage("uproots-zone", 4);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,6 +56,7 @@ function PlantDetail() {
       <Link to="/">&larr; Back to search</Link>
 
       <h1>{plant.common_name}</h1>
+      <SurvivalBadge userZone={zone} hardiness={plant.hardiness} />
       <p className="scientific-name">
         <em>{plant.scientific_name?.join(", ")}</em>
       </p>

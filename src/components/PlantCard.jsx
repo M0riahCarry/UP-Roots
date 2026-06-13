@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import SurvivalBadge from "./SurvivalBadge";
 
-function PlantCard({ plant }) {
+function PlantCard({ plant, userZone }) {
   return (
     //a real link (instead of a clickable div) works with keyboards,
     //screen readers, and open-in-new-tab for free
@@ -9,6 +10,7 @@ function PlantCard({ plant }) {
         <img src={plant.default_image.medium_url} alt={plant.common_name} />
       )}
       <h2>{plant.common_name}</h2>
+      <SurvivalBadge userZone={userZone} hardiness={plant.hardiness} />
       <p>
         <em>{plant.scientific_name?.join(", ")}</em>
       </p>

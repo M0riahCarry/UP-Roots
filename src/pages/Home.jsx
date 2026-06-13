@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { searchPlants } from "../services/perenual";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import PlantCard from "../components/PlantCard";
+import ZoneSelector from "../components/ZoneSelector";
 
 function Home() {
   const [query, setQuery] = useState("");
@@ -9,6 +11,8 @@ function Home() {
   const [error, setError] = useState(null);
   //tracks whether a search has run yet, so "no results" only shows after one
   const [hasSearched, setHasSearched] = useState(false);
+  //the user's hardiness zone, remembered across refreshes. Defaults to 4 (the UP).
+  const [zone, setZone] = useLocalStorage("uproots-zone", 4);
 
   async function handleSearch(e) {
     //stop the form from doing a full page reload on submit
@@ -32,6 +36,8 @@ function Home() {
     <div className="home">
       <h1>UP Roots</h1>
 
+      <ZoneSelector zone={zone} onChange={setZone} />
+
       <form className="search-form" onSubmit={handleSearch}>
         <input
           type="text"
@@ -52,7 +58,7 @@ function Home() {
 
       <div className="plant-grid">
         {results.map((plant) => (
-          <PlantCard key={plant.id} plant={plant} />
+          <PlantCard key={plant.id} plant={plant} userZone={zone} />
         ))}
       </div>
     </div>

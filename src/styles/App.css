@@ -8,6 +8,46 @@
   text-align: center;
 }
 
+/* zone picker */
+.zone-selector {
+  display: block;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--text);
+
+  select {
+    font: inherit;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-h);
+  }
+}
+
+/* survival badge */
+.survival-badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin: 6px 0;
+}
+
+.survival-badge.thrives {
+  color: #1b7a3d;
+  background: rgba(27, 122, 61, 0.12);
+}
+.survival-badge.risky {
+  color: #9a6a00;
+  background: rgba(214, 158, 0, 0.15);
+}
+.survival-badge.no {
+  color: #b3261e;
+  background: rgba(179, 38, 30, 0.12);
+}
+
 /* search bar */
 .search-form {
   display: flex;
