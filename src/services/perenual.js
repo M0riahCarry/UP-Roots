@@ -36,12 +36,28 @@ export async function searchPlants(query) {
   return data;
 }
 
+// Same idea for individual plants — once we've loaded a plant's details we
+// keep them, so revisiting it doesn't spend another request against the cap.
+const detailCache = new Map();
+
 export async function getPlantById(id) {
+  if (!API_KEY) {
+    throw new Error(
+      "Missing API key. Add VITE_PERENUAL_API_KEY to a .env file, then restart the dev server.",
+    );
+  }
+
+  if (detailCache.has(id)) {
+    return detailCache.get(id);
+  }
+
   const response = await fetch(
     `${BASE_URL}/species/details/${id}?key=${API_KEY}`,
   );
   if (!response.ok) {
     throw new Error(`Could not load plant (status ${response.status})`);
   }
-  return response.json();
+  const data = await response.json();
+  detailCache.set(id, data);
+  return data;
 }

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPlantById } from "../services/perenual";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import SurvivalBadge from "../components/SurvivalBadge";
+import SaveButton from "../components/SaveButton";
 
 function PlantDetail() {
   //pulls the :id segment out of the url, e.g. /plant/425 -> "425"
@@ -91,6 +92,8 @@ function PlantDetail() {
           <em>{plant.scientific_name.join(", ")}</em>
         </p>
       )}
+
+      <SaveButton plant={plant} />
 
       {plant.default_image?.regular_url && (
         <img
