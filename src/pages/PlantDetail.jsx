@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getPlantById } from "../services/perenual";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import SurvivalBadge from "../components/SurvivalBadge";
@@ -7,6 +7,7 @@ import SurvivalBadge from "../components/SurvivalBadge";
 function PlantDetail() {
   //pulls the :id segment out of the url, e.g. /plant/425 -> "425"
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [plant, setPlant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,11 @@ function PlantDetail() {
     };
   }, [id]);
 
+  //go back to wherever the user came from (their results) rather than a fresh search
+  function goBack() {
+    navigate(-1);
+  }
+
   if (loading) {
     return <p className="status">Loading plant...</p>;
   }
@@ -45,21 +51,46 @@ function PlantDetail() {
   if (error) {
     return (
       <div className="plant-detail">
+        <button className="back-link" onClick={goBack}>
+          &larr; Back to results
+        </button>
         <p className="status error">{error}</p>
-        <Link to="/">&larr; Back to search</Link>
       </div>
     );
   }
 
+  // Build the care facts, then keep only the ones the API actually filled in.
+  const facts = [
+    { label: "Watering", value: plant.watering },
+    {
+      label: "Sunlight",
+      value: plant.sunlight?.length ? plant.sunlight.join(", ") : null,
+    },
+    { label: "Cycle", value: plant.cycle },
+    { label: "Care level", value: plant.care_level },
+  ];
+  if (plant.hardiness?.min) {
+    const { min, max } = plant.hardiness;
+    facts.push({
+      label: "Hardiness zones",
+      value: max && max !== min ? `${min} - ${max}` : `${min}`,
+    });
+  }
+  const knownFacts = facts.filter((f) => f.value);
+
   return (
     <div className="plant-detail">
-      <Link to="/">&larr; Back to search</Link>
+      <button className="back-link" onClick={goBack}>
+        &larr; Back to results
+      </button>
 
       <h1>{plant.common_name}</h1>
       <SurvivalBadge userZone={zone} hardiness={plant.hardiness} />
-      <p className="scientific-name">
-        <em>{plant.scientific_name?.join(", ")}</em>
-      </p>
+      {plant.scientific_name?.length > 0 && (
+        <p className="scientific-name">
+          <em>{plant.scientific_name.join(", ")}</em>
+        </p>
+      )}
 
       {plant.default_image?.regular_url && (
         <img
@@ -71,33 +102,21 @@ function PlantDetail() {
 
       {plant.description && <p className="description">{plant.description}</p>}
 
-      <dl className="care-facts">
-        <dt>Watering</dt>
-        <dd>{plant.watering || "Unknown"}</dd>
-
-        <dt>Sunlight</dt>
-        <dd>{plant.sunlight?.join(", ") || "Unknown"}</dd>
-
-        <dt>Cycle</dt>
-        <dd>{plant.cycle || "Unknown"}</dd>
-
-        <dt>Care level</dt>
-        <dd>{plant.care_level || "Unknown"}</dd>
-
-        <dt>Indoor friendly</dt>
-        <dd>{plant.indoor ? "Yes" : "No"}</dd>
-
-        {plant.hardiness?.min && (
-          <>
-            <dt>Hardiness zones</dt>
-            <dd>
-              {plant.hardiness.min}
-              {plant.hardiness.max !== plant.hardiness.min &&
-                ` - ${plant.hardiness.max}`}
-            </dd>
-          </>
-        )}
-      </dl>
+      {knownFacts.length > 0 ? (
+        <dl className="care-facts">
+          {knownFacts.map((f) => (
+            <Fragment key={f.label}>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </Fragment>
+          ))}
+        </dl>
+      ) : (
+        <p className="no-data">
+          Detailed care info isn&apos;t available for this plant on Perenual&apos;s
+          free data plan.
+        </p>
+      )}
     </div>
   );
 }

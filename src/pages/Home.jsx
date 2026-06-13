@@ -1,35 +1,56 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { searchPlants } from "../services/perenual";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import PlantCard from "../components/PlantCard";
 import ZoneSelector from "../components/ZoneSelector";
 
 function Home() {
-  const [query, setQuery] = useState("");
+  // The active search lives in the URL (?q=...). That way the results survive
+  // navigating to a plant and back, and the page is shareable / refresh-safe.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeQuery = searchParams.get("q") ?? "";
+
+  const [query, setQuery] = useState(activeQuery); // what's typed in the box
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  //tracks whether a search has run yet, so "no results" only shows after one
-  const [hasSearched, setHasSearched] = useState(false);
   //the user's hardiness zone, remembered across refreshes. Defaults to 4 (the UP).
   const [zone, setZone] = useLocalStorage("uproots-zone", 4);
 
-  async function handleSearch(e) {
+  // Re-run the search whenever the URL's query changes. This covers both typing
+  // a new search and coming *back* to these results from a plant's detail page.
+  useEffect(() => {
+    let cancelled = false;
+    async function run() {
+      if (!activeQuery) {
+        setResults([]);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await searchPlants(activeQuery);
+        if (!cancelled) setResults(data.data ?? []);
+      } catch (err) {
+        if (!cancelled) setError(err.message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeQuery]);
+
+  function handleSubmit(e) {
     //stop the form from doing a full page reload on submit
     e.preventDefault();
-    if (!query.trim()) return;
-
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await searchPlants(query);
-      setResults(data.data ?? []);
-      setHasSearched(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    //updating the URL triggers the effect above, which does the actual fetch
+    setSearchParams({ q: trimmed });
   }
 
   return (
@@ -38,7 +59,7 @@ function Home() {
 
       <ZoneSelector zone={zone} onChange={setZone} />
 
-      <form className="search-form" onSubmit={handleSearch}>
+      <form className="search-form" onSubmit={handleSubmit}>
         <input
           type="text"
           value={query}
@@ -52,7 +73,7 @@ function Home() {
 
       {error && <p className="status error">{error}</p>}
 
-      {hasSearched && !loading && !error && results.length === 0 && (
+      {activeQuery && !loading && !error && results.length === 0 && (
         <p className="status">No plants found. Try another search.</p>
       )}
 
