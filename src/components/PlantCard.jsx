@@ -1,19 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import SurvivalBadge from "./SurvivalBadge";
 
-function PlantCard({ plant }) {
-  const navigate = useNavigate();
-
+function PlantCard({ plant, userZone }) {
   return (
-    <div onClick={() => navigate(`/plant/${plant.id}`)}>
-      <img src={plant.default_image?.medium_url} alt={plant.common_name} />
+    //a real link (instead of a clickable div) works with keyboards,
+    //screen readers, and open-in-new-tab for free
+    <Link to={`/plant/${plant.id}`} className="plant-card">
+      {plant.default_image?.medium_url && (
+        <img src={plant.default_image.medium_url} alt={plant.common_name} />
+      )}
       <h2>{plant.common_name}</h2>
+      <SurvivalBadge userZone={userZone} hardiness={plant.hardiness} />
       <p>
-        <em>{plant.scientific_name}</em>
+        <em>{plant.scientific_name?.join(", ")}</em>
       </p>
-      <p>Watering: {plant.watering}</p>
-      <p>Sunlight: {plant.sunlight?.join(", ")}</p>
-      <p>Cycle: {plant.cycle}</p>
-    </div>
+      <p>Watering: {plant.watering || "Unknown"}</p>
+      <p>Sunlight: {plant.sunlight?.join(", ") || "Unknown"}</p>
+      <p>Cycle: {plant.cycle || "Unknown"}</p>
+    </Link>
   );
 }
 
