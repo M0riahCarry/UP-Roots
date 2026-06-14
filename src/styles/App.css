@@ -125,6 +125,42 @@
   animation-iteration-count: infinite;
 }
 
+/* the empty gutter on each side of the ~1126px content column. overflow:hidden
+   keeps these leaves from ever drifting across into the content. */
+.leaf-side {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: calc((100vw - 1180px) / 2);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.leaf-side.left {
+  left: 0;
+}
+.leaf-side.right {
+  right: 0;
+}
+
+.leaf-side .leaf {
+  position: absolute;
+  top: -8vh;
+  opacity: 0.3;
+  will-change: transform;
+  animation-name: leaf-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* below this width there's no real gutter, so don't crowd the content */
+@media (max-width: 1240px) {
+  .leaf-side {
+    display: none;
+  }
+}
+
 @keyframes leaf-drift {
   0% {
     transform: translateY(-10vh) translateX(0) rotate(0deg);
@@ -139,7 +175,8 @@
 
 /* respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
-  .leaf-bg {
+  .leaf-bg,
+  .leaf-side {
     display: none;
   }
 }
