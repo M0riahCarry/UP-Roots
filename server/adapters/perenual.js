@@ -1,11 +1,11 @@
 // Translates one raw Perenual species object (from either the list or the
-// details endpoint) into our internal Plant shape. Endpoints that omit a field
-// (e.g. the list endpoint has no description) simply map to null.
+// details endpoint) into the internal Plant shape the frontend expects.
+// Endpoints that omit a field (e.g. the list endpoint has no description)
+// simply map to null.
+//
+// Note: this lives on the server now. When we add more sources (GBIF, etc.),
+// each gets its own adapter here and the results are merged before being sent.
 
-/**
- * @param {Object} raw - a single species object from the Perenual API
- * @returns {import("../plant.js").Plant}
- */
 export function adaptPerenualSpecies(raw) {
   return {
     id: raw.id,
