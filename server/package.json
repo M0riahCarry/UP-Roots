@@ -1,0 +1,16 @@
+{
+  "name": "up-roots-server",
+  "version": "1.0.0",
+  "description": "Backend API for UP Roots — proxies plant data and keeps API keys off the client.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

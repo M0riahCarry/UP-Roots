@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPlantById } from "../services/perenual";
+import { getPlantById } from "../services/plants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import SurvivalBadge from "../components/SurvivalBadge";
 import RegionalBadge from "../components/RegionalBadge";

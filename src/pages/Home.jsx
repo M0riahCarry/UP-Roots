@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { searchPlants } from "../services/perenual";
+import { searchPlants } from "../services/plants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import PlantCard from "../components/PlantCard";
 import ZoneSelector from "../components/ZoneSelector";
