@@ -30,8 +30,8 @@ function Home() {
       setLoading(true);
       setError(null);
       try {
-        const data = await searchPlants(activeQuery);
-        if (!cancelled) setResults(data.data ?? []);
+        const plants = await searchPlants(activeQuery);
+        if (!cancelled) setResults(plants);
       } catch (err) {
         if (!cancelled) setError(err.message);
       } finally {
