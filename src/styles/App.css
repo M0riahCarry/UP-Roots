@@ -89,6 +89,52 @@
   }
 }
 
+/* "find my zone by ZIP" row */
+.zip-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 14px;
+
+  input {
+    font: inherit;
+    width: 110px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-h);
+  }
+
+  button {
+    font: inherit;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    color: var(--accent);
+    background: var(--accent-bg);
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+}
+
+.zone-status {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text);
+}
+.zone-status.error {
+  color: #d33;
+}
+
 /* link that takes you back to your results (keeps the search button for searching) */
 .back-link {
   display: inline-block;
