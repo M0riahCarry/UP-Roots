@@ -2,6 +2,25 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { adaptPerenualSpecies } from "./adapters/perenual.js";
+import { getWikipediaInfo } from "./adapters/wikipedia.js";
+
+// Search cards only need an image, so we only look a plant up when it has none.
+async function fillImage(plant) {
+  if (plant.image) return plant;
+  const wiki = await getWikipediaInfo(plant.scientificName);
+  return { ...plant, image: wiki.image };
+}
+
+// The detail page also shows a description, so fill both gaps there.
+async function fillGaps(plant) {
+  if (plant.image && plant.description) return plant;
+  const wiki = await getWikipediaInfo(plant.scientificName);
+  return {
+    ...plant,
+    image: plant.image ?? wiki.image,
+    description: plant.description ?? wiki.description,
+  };
+}
 
 // The Perenual key now lives here on the server, read from server/.env, so it
 // never ships to the browser. The frontend only ever talks to this API.
@@ -36,7 +55,9 @@ app.get("/api/plants", async (req, res) => {
     const data = await upstream.json();
     //normalize into our Plant shape here, so the frontend gets clean data
     const plants = (data.data ?? []).map(adaptPerenualSpecies);
-    res.json(plants);
+    //fill missing images from Wikipedia (concurrently; failures just stay empty)
+    const enriched = await Promise.all(plants.map(fillImage));
+    res.json(enriched);
   } catch {
     res.status(502).json({ error: "Could not reach the plant data source." });
   }
@@ -59,7 +80,8 @@ app.get("/api/plants/:id", async (req, res) => {
         .json({ error: `Could not load plant (status ${upstream.status})` });
     }
     const data = await upstream.json();
-    res.json(adaptPerenualSpecies(data));
+    const plant = await fillGaps(adaptPerenualSpecies(data));
+    res.json(plant);
   } catch {
     res.status(502).json({ error: "Could not reach the plant data source." });
   }
