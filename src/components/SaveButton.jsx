@@ -8,18 +8,9 @@ function SaveButton({ plant }) {
     if (saved) {
       removePlant(plant.id);
     } else {
-      // Save just the fields the cards need, so the garden page can render
-      // from localStorage without re-calling the (rate-limited) API.
-      addPlant({
-        id: plant.id,
-        common_name: plant.common_name,
-        scientific_name: plant.scientific_name,
-        default_image: plant.default_image,
-        watering: plant.watering,
-        sunlight: plant.sunlight,
-        cycle: plant.cycle,
-        hardiness: plant.hardiness,
-      });
+      // plant is already our normalized Plant shape, so we can store it as-is;
+      // the garden page renders it from localStorage without re-calling the API.
+      addPlant(plant);
     }
   }
 

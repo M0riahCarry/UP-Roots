@@ -14,13 +14,13 @@ function PlantCard({ plant, userZone }) {
     //a real link (instead of a clickable div) works with keyboards,
     //screen readers, and open-in-new-tab for free
     <Link to={`/plant/${plant.id}`} className="plant-card">
-      {plant.default_image?.medium_url && (
-        <img src={plant.default_image.medium_url} alt={plant.common_name} />
+      {plant.image?.thumb && (
+        <img src={plant.image.thumb} alt={plant.commonName} />
       )}
-      <h2>{plant.common_name}</h2>
-      {plant.scientific_name?.length > 0 && (
+      <h2>{plant.commonName}</h2>
+      {plant.scientificName && (
         <p className="card-sci">
-          <em>{plant.scientific_name.join(", ")}</em>
+          <em>{plant.scientificName}</em>
         </p>
       )}
       <SurvivalBadge userZone={userZone} hardiness={plant.hardiness} />

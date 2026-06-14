@@ -1,3 +1,5 @@
+import { adaptPerenualSpecies } from "./adapters/perenual";
+
 const API_KEY = import.meta.env.VITE_PERENUAL_API_KEY;
 // v2 is Perenual's current API. The old /api (v1) path is being retired and
 // now returns 404, so both calls below go through /api/v2.
@@ -32,8 +34,10 @@ export async function searchPlants(query) {
     throw new Error(`Search failed (status ${response.status})`);
   }
   const data = await response.json();
-  searchCache.set(query, data);
-  return data;
+  //normalize every result into our internal Plant shape before it leaves here
+  const plants = (data.data ?? []).map(adaptPerenualSpecies);
+  searchCache.set(query, plants);
+  return plants;
 }
 
 // Same idea for individual plants — once we've loaded a plant's details we
@@ -58,6 +62,7 @@ export async function getPlantById(id) {
     throw new Error(`Could not load plant (status ${response.status})`);
   }
   const data = await response.json();
-  detailCache.set(id, data);
-  return data;
+  const plant = adaptPerenualSpecies(data);
+  detailCache.set(id, plant);
+  return plant;
 }

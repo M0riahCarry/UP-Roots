@@ -68,7 +68,7 @@ function PlantDetail() {
       value: plant.sunlight?.length ? plant.sunlight.join(", ") : null,
     },
     { label: "Cycle", value: plant.cycle },
-    { label: "Care level", value: plant.care_level },
+    { label: "Care level", value: plant.careLevel },
   ];
   if (plant.hardiness?.min) {
     const { min, max } = plant.hardiness;
@@ -85,21 +85,21 @@ function PlantDetail() {
         &larr; Back to results
       </button>
 
-      <h1>{plant.common_name}</h1>
+      <h1>{plant.commonName}</h1>
       <SurvivalBadge userZone={zone} hardiness={plant.hardiness} />
-      {plant.scientific_name?.length > 0 && (
+      {plant.scientificName && (
         <p className="scientific-name">
-          <em>{plant.scientific_name.join(", ")}</em>
+          <em>{plant.scientificName}</em>
         </p>
       )}
 
       <SaveButton plant={plant} />
 
-      {plant.default_image?.regular_url && (
+      {plant.image?.full && (
         <img
           className="detail-image"
-          src={plant.default_image.regular_url}
-          alt={plant.common_name}
+          src={plant.image.full}
+          alt={plant.commonName}
         />
       )}
 
