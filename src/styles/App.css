@@ -106,6 +106,69 @@
   }
 }
 
+/* decorative drifting leaves behind the app */
+.leaf-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.leaf-bg .leaf {
+  position: absolute;
+  top: -8vh;
+  opacity: 0.22;
+  will-change: transform;
+  animation-name: leaf-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes leaf-drift {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(50vh) translateX(36px) rotate(140deg);
+  }
+  100% {
+    transform: translateY(115vh) translateX(-18px) rotate(360deg);
+  }
+}
+
+/* respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .leaf-bg {
+    display: none;
+  }
+}
+
+/* keep all real content above the leaves */
+.app-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* a plant's badges sit on one row */
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.regional-badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #2563a8;
+  background: rgba(37, 99, 168, 0.12);
+}
+
 /* survival badge */
 .survival-badge {
   display: inline-block;

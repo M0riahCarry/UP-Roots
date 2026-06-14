@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPlantById } from "../services/perenual";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import SurvivalBadge from "../components/SurvivalBadge";
+import RegionalBadge from "../components/RegionalBadge";
 import SaveButton from "../components/SaveButton";
 
 function PlantDetail() {
@@ -86,7 +87,10 @@ function PlantDetail() {
       </button>
 
       <h1>{plant.commonName}</h1>
-      <SurvivalBadge userZone={zone} hardiness={plant.hardiness} />
+      <div className="badge-row">
+        <SurvivalBadge userZone={zone} hardiness={plant.hardiness} />
+        <RegionalBadge scientificName={plant.scientificName} />
+      </div>
       {plant.scientificName && (
         <p className="scientific-name">
           <em>{plant.scientificName}</em>
