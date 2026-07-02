@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# server's persisted plant-data cache (rebuilds itself)
+server/data/search-cache.json
+server/data/detail-cache.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
