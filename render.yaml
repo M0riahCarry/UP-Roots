@@ -1,0 +1,13 @@
+# One-click deploy blueprint for Render (https://render.com).
+# Builds the React frontend, installs the server, and runs Express — which
+# serves both the API and the built frontend from a single URL.
+services:
+  - type: web
+    name: up-roots
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build && cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: PERENUAL_API_KEY
+        sync: false # set this in the Render dashboard; never commit the key

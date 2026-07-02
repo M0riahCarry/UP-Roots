@@ -15,7 +15,10 @@ export function adaptPerenualSpecies(raw) {
     image: raw.default_image
       ? {
           thumb: raw.default_image.medium_url ?? raw.default_image.thumbnail,
-          full: raw.default_image.regular_url ?? raw.default_image.medium_url,
+          full:
+            raw.default_image.regular_url ??
+            raw.default_image.medium_url ??
+            raw.default_image.thumbnail,
         }
       : null,
     watering: raw.watering ?? null,
