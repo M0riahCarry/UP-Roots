@@ -135,6 +135,151 @@
   color: #d33;
 }
 
+/* seasonal status under the zone picker */
+.season-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  .season-range {
+    opacity: 0.8;
+  }
+  .season-headline {
+    color: var(--text-h);
+    font-weight: 600;
+  }
+}
+
+/* first-visit suggestion chips */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+
+  button {
+    font: inherit;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-h);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: var(--accent-border);
+      box-shadow: var(--shadow);
+    }
+  }
+}
+
+/* "hide plants that won't survive" toggle */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  cursor: pointer;
+
+  input {
+    accent-color: var(--accent);
+  }
+
+  .filter-note {
+    opacity: 0.7;
+  }
+}
+
+/* loading skeleton cards */
+.plant-card.skeleton {
+  pointer-events: none;
+
+  .sk-img,
+  .sk-line {
+    background: var(--border);
+    border-radius: 8px;
+    animation: sk-pulse 1.4s ease-in-out infinite;
+  }
+  .sk-img {
+    width: 100%;
+    height: 180px;
+  }
+  .sk-line {
+    height: 14px;
+    margin-top: 12px;
+  }
+  .sk-line.wide {
+    width: 70%;
+    height: 20px;
+  }
+  .sk-line.narrow {
+    width: 45%;
+  }
+}
+
+@keyframes sk-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plant-card.skeleton .sk-img,
+  .plant-card.skeleton .sk-line {
+    animation: none;
+  }
+}
+
+/* saved-plant count in the nav */
+.nav-count {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* "can I plant this now?" box on the detail page */
+.planting-window {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  background: var(--surface);
+
+  h2 {
+    font-size: 18px;
+    margin: 0 0 6px;
+  }
+  p {
+    margin: 0;
+    font-size: 15px;
+  }
+}
+
+.source-note {
+  margin-top: 16px;
+  font-size: 13px;
+  opacity: 0.75;
+  font-style: italic;
+}
+
 /* link that takes you back to your results (keeps the search button for searching) */
 .back-link {
   display: inline-block;

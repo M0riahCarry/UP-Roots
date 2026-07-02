@@ -59,7 +59,10 @@ function ZoneSelector({ zone, onChange }) {
       </form>
 
       {status && (
-        <p className={`zone-status ${status.type === "error" ? "error" : ""}`}>
+        <p
+          className={`zone-status ${status.type === "error" ? "error" : ""}`}
+          role={status.type === "error" ? "alert" : "status"}
+        >
           {status.message}
         </p>
       )}

@@ -22,14 +22,16 @@ describe("getSurvival", () => {
     expect(getSurvival(7, { min: 3, max: 7 }).status).toBe("thrives");
   });
 
-  it("is risky when the zone is exactly one below the plant's minimum", () => {
+  it("is risky (cold side) when the zone is exactly one below the plant's minimum", () => {
     const result = getSurvival(4, { min: 5, max: 9 });
     expect(result.status).toBe("risky");
+    expect(result.label).toMatch(/winter/i);
   });
 
-  it("is risky when the zone is exactly one above the plant's maximum", () => {
+  it("is risky (warm side) when the zone is exactly one above the plant's maximum", () => {
     const result = getSurvival(8, { min: 3, max: 7 });
     expect(result.status).toBe("risky");
+    expect(result.label).toMatch(/heat/i);
   });
 
   it("won't survive when the zone is far below the minimum", () => {

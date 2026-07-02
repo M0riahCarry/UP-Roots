@@ -5,6 +5,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import SurvivalBadge from "../components/SurvivalBadge";
 import RegionalBadge from "../components/RegionalBadge";
 import SaveButton from "../components/SaveButton";
+import PlantingWindow from "../components/PlantingWindow";
 
 function PlantDetail() {
   //pulls the :id segment out of the url, e.g. /plant/425 -> "425"
@@ -108,6 +109,14 @@ function PlantDetail() {
       )}
 
       {plant.description && <p className="description">{plant.description}</p>}
+
+      <PlantingWindow zone={zone} />
+
+      {plant.source === "curated" && (
+        <p className="source-note">
+          From the UP Roots built-in library of cold-climate plants.
+        </p>
+      )}
 
       {knownFacts.length > 0 ? (
         <dl className="care-facts">

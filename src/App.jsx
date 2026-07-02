@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import PlantDetail from "./pages/PlantDetail";
 import Garden from "./pages/Garden";
 import NotFound from "./pages/NotFound";
+import NavBar from "./components/NavBar";
 import LeafBackground from "./components/LeafBackground";
 import { GardenProvider } from "./context/GardenProvider";
 import "./styles/App.css";
@@ -16,10 +17,7 @@ function App() {
         {/* decorative leaves sit behind everything */}
         <LeafBackground />
         <div className="app-content">
-          <nav className="main-nav">
-            <NavLink to="/">Search</NavLink>
-            <NavLink to="/garden">My Garden</NavLink>
-          </nav>
+          <NavBar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plant/:id" element={<PlantDetail />} />
