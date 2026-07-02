@@ -20,12 +20,20 @@ export function getSurvival(userZone, hardiness) {
     };
   }
 
-  // One zone off in either direction = borderline, survivable with effort.
-  if (zone === min - 1 || zone === max + 1) {
+  // One zone off in either direction = borderline, survivable with effort —
+  // but the advice differs depending on which side you're off by.
+  if (zone === min - 1) {
     return {
       status: "risky",
       emoji: "🟡",
       label: "Risky — needs winter protection",
+    };
+  }
+  if (zone === max + 1) {
+    return {
+      status: "risky",
+      emoji: "🟡",
+      label: "Risky — may struggle in summer heat",
     };
   }
 

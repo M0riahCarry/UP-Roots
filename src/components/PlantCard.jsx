@@ -15,7 +15,8 @@ function PlantCard({ plant, userZone }) {
     //screen readers, and open-in-new-tab for free
     <Link to={`/plant/${plant.id}`} className="plant-card">
       {plant.image?.thumb && (
-        <img src={plant.image.thumb} alt={plant.commonName} />
+        //lazy: off-screen card images load only as the user scrolls to them
+        <img src={plant.image.thumb} alt={plant.commonName} loading="lazy" />
       )}
       <h2>{plant.commonName}</h2>
       {plant.scientificName && (
